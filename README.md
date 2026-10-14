@@ -14,11 +14,18 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/MinhNhan2010/StudioVideo/pulls)
 
 [Tính năng nổi bật](#-tính-năng-nổi-bật) •
+[Giao diện UI](#-trải-nghiệm-giao-diện-người-dùng-ui-gallery) •
 [Mẫu dựng sẵn](#-danh-sách-mẫu-templates-có-sẵn) •
 [Kiến trúc Pipeline](#-kiến-trúc-pipeline-xử-lý) •
 [Cài đặt & Chạy](#-hướng-dẫn-cài-đặt--khởi-chạy) •
 [Phím tắt](#-bảng-phím-tắt-pro-shortcuts) •
 [Bảo mật & Riêng tư](#-bảo-mật--quyền-riêng-tư)
+
+<br/>
+
+<p align="center">
+  <img src="./assets/demo/preview-dashboard.png" alt="VideoStudio Workspace Preview" width="100%" style="border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);" />
+</p>
 
 ---
 
@@ -29,6 +36,18 @@
 **VideoStudio** là studio biên tập video tự động chạy cục bộ (Local-first) trên máy tính của bạn. Không cần cài đặt phần mềm dựng phim phức tạp (Premiere, CapCut, DaVinci), không tốn phí thuê bao hàng tháng, không xếp hàng chờ đợi trên máy chủ đám mây.
 
 Bạn chỉ cần: **Kéo thả video thô** ➔ **Chọn phong cách mẫu (TikTok, Điện ảnh, Podcast...)** ➔ **Xem trước trực tiếp (Live Preview)** ➔ **Xuất video chuẩn 1080p kèm phụ đề Karaoke AI**.
+
+---
+
+## 📸 Trải nghiệm Giao diện người dùng (UI Gallery)
+
+| 🌌 **Khung làm việc chính (Workspace & Live Mode)** | 📥 **Kéo thả & Tải video (Dark Aurora)** |
+|:---:|:---:|
+| ![Workspace Preview](./assets/demo/preview-dashboard.png) | ![Dropzone Screen](./assets/demo/empty-dropzone.png) |
+
+| ⚙️ **Bảng điều khiển Tinh chỉnh (Fine-tune Controls)** | 📝 **Ngăn Biên tập Phụ đề AI (Subtitle Editor)** |
+|:---:|:---:|
+| ![Tune Panel](./assets/demo/tune-panel.png) | ![Subtitles Drawer](./assets/demo/subtitles-drawer.png) |
 
 ---
 
