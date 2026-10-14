@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>VideoStudio — Tự động chỉnh sửa video theo mẫu</title>
+  <meta name="description" content="Tool cá nhân tự động edit video: tải video lên, chọn mẫu TikTok, điện ảnh, vintage, phụ đề AI… và xuất ngay." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><path d='M0 0h32v23l-9 9H0z' fill='%23c8ff3d'/><rect width='4' height='32' fill='%235b3df5'/><path d='M12 9.5v13l11-6.5z' fill='%230a0d06'/></svg>" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="theme-nghien.css" />
+</head>
+<body>
+  <div class="aurora" aria-hidden="true"><span></span><span></span><span></span></div>
+
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="VideoStudio">
+      <span class="brand-mark">V</span>
+      <span class="brand-name">video<b>studio</b><em>.vn</em></span>
+      <span class="brand-tag">Edit video theo mẫu</span>
+    </a>
+
+    <ol class="steps" id="steps">
+      <li data-step="1" class="active"><span>01</span>Tải video</li>
+      <li data-step="2"><span>02</span>Chọn mẫu</li>
+      <li data-step="3"><span>03</span>Xuất video</li>
+    </ol>
+
+    <div class="top-actions">
+      <button class="btn ghost" id="btn-history" title="Video đã xuất">
+        <svg viewBox="0 0 24 24"><path d="M12 8v4l3 2M3.05 11a9 9 0 1 1 .5 4M3 4v5h5" /></svg>
+        <span>Đã xuất</span>
+      </button>
+      <button class="btn ghost icon-only" id="btn-settings" title="Cài đặt">
+        <svg viewBox="0 0 24 24"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z" /></svg>
+        <i class="dot" id="key-dot"></i>
+      </button>
+    </div>
+  </header>
+
+  <main class="workspace">
+    <!-- ============ LEFT: stage ============ -->
+    <section class="stage">
+      <h1 class="sr-only">Tự động chỉnh sửa video theo mẫu</h1>
+
+      <!-- Empty: drop zone -->
+      <label class="dropzone" id="dropzone" for="file-input">
+        <input type="file" id="file-input" accept="video/*" hidden />
+        <div class="dz-head">
+          <div class="dz-orb"><svg viewBox="0 0 24 24"><path d="M12 16V4m0 0-4.5 4.5M12 4l4.5 4.5M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3" /></svg></div>
+          <span class="kicker">Video studio cá nhân · chạy trên máy bạn</span>
+        </div>
+        <h2>Thả video vào. <em>Chọn mẫu. Xuất ngay.</em></h2>
+        <p>Kéo thả file vào khung này hoặc <u>bấm để chọn file</u> — MP4, MOV, MKV, WEBM… Mình lo phần cắt, màu, chữ và phụ đề.</p>
+        <div class="dz-features">
+          <span><i>01</i>Tự cắt khoảng lặng</span><span><i>02</i>Phụ đề AI</span><span><i>03</i>13 mẫu màu &amp; khung</span><span><i>04</i>Ghép nhạc nền</span>
+        </div>
+        <div class="dz-progress" id="upload-progress" hidden>
+          <div class="bar"><i id="upload-bar"></i></div>
+          <span id="upload-text">Đang tải lên…</span>
+        </div>
+      </label>
+
+      <!-- Loaded: player -->
+      <div class="player-card glass" id="player-card" hidden>
+        <div class="player-head">
+          <div class="tabs" role="tablist" id="view-tabs">
+            <button role="tab" class="tab active" data-view="original">Video gốc</button>
+            <button role="tab" class="tab" data-view="preview" disabled>Xem trước</button>
+            <button role="tab" class="tab" data-view="result" disabled>Kết quả</button>
+          </div>
+          <button class="btn ghost sm" id="btn-change">
+            <svg viewBox="0 0 24 24"><path d="M4 4v6h6M20 20v-6h-6M5.6 15a7 7 0 0 0 12.3 2.3M18.4 9A7 7 0 0 0 6.1 6.7" /></svg>
+            Đổi video
+          </button>
+        </div>
+        <div class="viewer" id="viewer">
+          <div class="live-frame" id="live-frame">
+            <canvas id="live-bg" width="64" height="64" aria-hidden="true"></canvas>
+            <video id="video" playsinline preload="auto"></video>
+            <div class="live-ov" id="live-ov" aria-hidden="true">
+              <i class="ov-grain"></i><i class="ov-vignette"></i><i class="ov-bars"></i>
+              <div class="ov-sub" id="ov-sub"></div>
+              <div class="ov-title" id="ov-title"></div>
+              <div class="ov-wm" id="ov-wm"></div>
+              <div class="ov-outro" id="ov-outro"><span></span></div>
+              <i class="ov-fade" id="ov-fade"></i>
+            </div>
+          </div>
+          <div class="viewer-badge" id="viewer-badge" hidden></div>
+          <div class="live-badge" id="live-badge" hidden><i></i>LIVE · mô phỏng hiệu ứng</div>
+          <button class="big-play" id="big-play" aria-label="Phát"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z" /></svg></button>
+        </div>
+
+        <!-- Transport + trim timeline (original view) -->
+        <div class="transport" id="transport">
+          <button class="t-btn" id="t-play" aria-label="Phát / dừng (Space)" title="Phát / dừng (Space)">
+            <svg class="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z" /></svg>
+            <svg class="i-pause" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14" /></svg>
+          </button>
+          <span class="t-time" id="t-time">0:00.0 / 0:00.0</span>
+          <div class="timeline" id="timeline" title="Bấm để tua · kéo 2 tay cầm để cắt đầu/cuối">
+            <div class="tl-strip" id="tl-strip"></div>
+            <div class="tl-dim left" id="tl-dim-l"></div>
+            <div class="tl-dim right" id="tl-dim-r"></div>
+            <div class="tl-range" id="tl-range"></div>
+            <div class="tl-handle start" id="tl-h-start" role="slider" aria-label="Điểm bắt đầu" tabindex="0"><i></i></div>
+            <div class="tl-handle end" id="tl-h-end" role="slider" aria-label="Điểm kết thúc" tabindex="0"><i></i></div>
+            <div class="tl-head" id="tl-head"></div>
+          </div>
+          <button class="t-btn" id="t-mute" aria-label="Bật/tắt tiếng" title="Bật/tắt tiếng (M)">
+            <svg class="i-vol" viewBox="0 0 24 24"><path d="M11 5 6 9H2v6h4l5 4zM15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14" /></svg>
+            <svg class="i-muted" viewBox="0 0 24 24"><path d="M11 5 6 9H2v6h4l5 4zM22 9l-6 6M16 9l6 6" /></svg>
+          </button>
+          <label class="live-toggle" title="Mô phỏng màu, khung, chữ, tốc độ… ngay trên video gốc (L)">
+            <input type="checkbox" id="live-toggle" checked /><span class="switch-mini"></span>Hiệu ứng trực tiếp
+          </label>
+        </div>
+        <div class="trim-row" id="trim-row">
+          <span class="trim-info" id="trim-info">✂ Dùng toàn bộ video</span>
+          <div class="trim-actions">
+            <button class="btn ghost xs" id="trim-in" title="Đặt điểm đầu tại vị trí đang xem (I)">[ Đầu <kbd>I</kbd></button>
+            <button class="btn ghost xs" id="trim-out" title="Đặt điểm cuối tại vị trí đang xem (O)">Cuối ] <kbd>O</kbd></button>
+            <button class="btn ghost xs" id="trim-reset" hidden>Bỏ cắt</button>
+          </div>
+        </div>
+        <div class="meta-row">
+          <span class="file-name" id="file-name">—</span>
+          <div class="chips" id="meta-chips"></div>
+        </div>
+      </div>
+
+      <!-- Action bar -->
+      <div class="action-bar glass" id="action-bar" hidden>
+        <div class="selected-template" id="selected-template">
+          <span class="st-swatch" id="st-swatch"></span>
+          <div><small>Mẫu đang chọn</small><b id="st-name">Chưa chọn</b></div>
+        </div>
+        <div class="actions">
+          <button class="btn secondary" id="btn-preview" disabled title="Dựng nhanh 8 giây từ vị trí đang xem">
+            <svg viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" /><circle cx="12" cy="12" r="3" /></svg>
+            Xem trước 8s
+          </button>
+          <button class="btn primary" id="btn-export" disabled title="Ctrl + Enter">
+            <svg viewBox="0 0 24 24"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" /></svg>
+            Xuất video
+          </button>
+        </div>
+        <div class="kbd-hint" id="kbd-hint">
+          <span><kbd>Space</kbd> phát</span><span><kbd>←</kbd><kbd>→</kbd> tua</span><span><kbd>I</kbd><kbd>O</kbd> cắt đầu/cuối</span>
+          <span><kbd>P</kbd> xem trước</span><span><kbd>Ctrl</kbd>+<kbd>Enter</kbd> xuất</span><span><kbd>L</kbd> hiệu ứng trực tiếp</span>
+        </div>
+
+        <div class="progress-panel" id="progress-panel" hidden>
+          <div class="pp-top">
+            <div class="pp-stage"><span class="spinner"></span><b id="pp-stage">Đang xử lý…</b></div>
+            <div class="pp-right"><span id="pp-percent">0%</span><button class="btn ghost sm" id="btn-cancel">Huỷ</button></div>
+          </div>
+          <div class="bar big"><i id="pp-bar"></i></div>
+          <div class="pp-msg" id="pp-msg"></div>
+        </div>
+
+        <div class="result-panel" id="result-panel" hidden>
+          <div class="rp-head">
+            <span class="rp-icon">✓</span>
+            <div><b>Xuất video thành công!</b><small id="rp-info"></small></div>
+          </div>
+          <ul class="warnings" id="rp-warnings"></ul>
+          <div class="rp-actions">
+            <a class="btn primary" id="rp-download" download>Tải MP4</a>
+            <a class="btn secondary" id="rp-srt" download hidden>Tải phụ đề .SRT</a>
+            <button class="btn ghost" id="rp-close">Đóng</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ RIGHT: sidebar ============ -->
+    <aside class="sidebar glass">
+      <div class="side-tabs" role="tablist">
+        <button class="side-tab active" data-panel="templates">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5" /><rect x="14" y="3" width="7" height="7" rx="1.5" /><rect x="3" y="14" width="7" height="7" rx="1.5" /><rect x="14" y="14" width="7" height="7" rx="1.5" /></svg>
+          Mẫu edit
+        </button>
+        <button class="side-tab" data-panel="tune">
+          <svg viewBox="0 0 24 24"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6" /></svg>
+          Tinh chỉnh <i class="count" id="tune-count">0</i>
+        </button>
+      </div>
+
+      <div class="panel active" id="panel-templates">
+        <p class="panel-hint">Chọn một mẫu — mọi hiệu ứng được thiết lập sẵn và hiển thị trực tiếp trên video. Tinh chỉnh thêm ở tab bên cạnh.</p>
+        <div class="filter-chips" id="filter-chips" role="tablist" aria-label="Lọc mẫu"></div>
+        <div class="template-grid" id="template-grid"></div>
+      </div>
+
+      <div class="panel" id="panel-tune">
+        <div class="tune-head">
+          <p class="panel-hint">Bật/tắt từng hiệu ứng và chỉnh thông số.</p>
+          <div class="tune-actions">
+            <button class="btn ghost sm" id="btn-reset" title="Bỏ mọi chỉnh sửa, quay về mẫu gốc">Khôi phục</button>
+            <button class="btn secondary sm" id="btn-save-tpl" disabled title="Lưu các chỉnh sửa hiện tại thành mẫu của bạn">
+              <svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z" /><path d="M17 21v-8H7v8M7 3v5h8" /></svg>
+              Lưu thành mẫu
+            </button>
+          </div>
+        </div>
+        <div class="sections" id="sections"></div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- History drawer -->
+  <div class="drawer-backdrop" id="drawer-backdrop" hidden></div>
+  <aside class="drawer glass" id="drawer" aria-hidden="true">
+    <div class="drawer-head">
+      <h2>Video đã xuất</h2>
+      <button class="btn ghost icon-only" id="drawer-close" aria-label="Đóng"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" /></svg></button>
+    </div>
+    <div class="history" id="history-list"></div>
+  </aside>
+
+  <!-- Subtitle editor drawer -->
+  <aside class="drawer glass subs-drawer" id="subs-drawer" aria-hidden="true">
+    <div class="drawer-head">
+      <div>
+        <h2>Biên tập phụ đề</h2>
+        <small class="muted" id="subs-status">AI nghe video và chép lời — bạn sửa chữ sai trước khi xuất.</small>
+      </div>
+      <button class="btn ghost icon-only" id="subs-close" aria-label="Đóng"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" /></svg></button>
+    </div>
+    <div class="subs-ai-card" id="subs-ai-card" hidden></div>
+    <div class="subs-progress" id="subs-progress" hidden>
+      <div class="pp-stage"><span class="spinner"></span><b id="subs-stage">Đang chuẩn bị…</b></div>
+      <div class="bar"><i id="subs-bar"></i></div>
+    </div>
+    <div class="subs-list" id="subs-list"></div>
+    <div class="subs-foot">
+      <button class="btn ghost sm" id="subs-clear" title="Bỏ bản đã sửa, để AI tự tạo khi xuất">Bỏ bản sửa</button>
+      <button class="btn secondary sm" id="subs-regen">↻ AI tạo lại</button>
+    </div>
+  </aside>
+
+  <!-- Settings -->
+  <dialog class="modal glass" id="settings-modal">
+    <form method="dialog" id="settings-form">
+      <h2>Cài đặt</h2>
+      <label class="field">
+        <span>Gemini API key <small>(dùng cho phụ đề AI)</small></span>
+        <input type="password" id="api-key" placeholder="AIza…" autocomplete="off" />
+      </label>
+      <p class="muted" id="key-status"></p>
+      <p class="muted">Lấy key miễn phí tại <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a>. Key chỉ được lưu trên máy bạn (<code>data/settings.json</code>).</p>
+      <div class="modal-actions">
+        <button class="btn ghost" value="cancel">Đóng</button>
+        <button class="btn primary" id="save-key" value="save">Lưu key</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Save as template -->
+  <dialog class="modal glass" id="save-modal">
+    <form method="dialog" id="save-form">
+      <h2>Lưu thành mẫu của bạn</h2>
+      <label class="field">
+        <span>Tên mẫu</span>
+        <input type="text" id="tpl-name" maxlength="40" placeholder="VD: Kênh review của tôi" autocomplete="off" />
+      </label>
+      <p class="muted" id="tpl-summary"></p>
+      <div class="modal-actions">
+        <button class="btn ghost" value="cancel">Huỷ</button>
+        <button class="btn primary" value="save">Lưu mẫu</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div class="toasts" id="toasts"></div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

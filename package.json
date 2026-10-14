@@ -1,0 +1,23 @@
+{
+  "name": "video-studio",
+  "version": "1.0.0",
+  "description": "Tool cá nhân tự động chỉnh sửa video theo mẫu (FFmpeg + Gemini)",
+  "type": "module",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js",
+    "test": "node scripts/smoke-test.mjs",
+    "test:unit": "node --test tests/unit.test.mjs",
+    "test:api": "node --test --test-concurrency=1 tests/api.test.mjs",
+    "test:all": "npm run test:unit && npm test && npm run test:api"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@google/genai": "^2.29.1",
+    "express": "^5.3.0",
+    "ffmpeg-static": "^5.3.0",
+    "ffprobe-static": "^3.1.0",
+    "multer": "^2.4.0"
+  }
+}
